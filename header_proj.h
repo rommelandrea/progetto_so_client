@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#include <stddef.h>
+#include <linux/stddef.h>
 #include <string.h>
 #include <errno.h>
 
@@ -12,6 +12,8 @@
 #include <sys/sem.h>
 #include <sys/shm.h>
 #include <sys/wait.h>
+#include <sys/socket.h>
+#include <sys/un.h>
 
 #include <limits.h>
 #include <fcntl.h>
@@ -41,7 +43,7 @@
 #define ORTHOPEDICS 1
 #define RADIOLOGY 2
 //
-// =========== costanti di utilità generale ============
+// =========== costanti di utilit�� generale ============
 //
 // ----- max lunghezza del file contenente la fattura -----
 #define FILENAMELEN 32
@@ -75,12 +77,12 @@ typedef struct _msgbuf{
 		// a chi spedire la risposta
 	short priority; // in {0,1,2,3,4} 0: ILLWAIT, ..., 4: CANTWAIT
 	int kindof_service; // in {0,1,2} cfr. #define sopra
-	int turn; // numero progressivo con cui il client sarà servito
-	int price; // prezzo che il client dovrà pagare: (a) un tanto fisso per
-		// ogni prestazione, più (b) una quota in funzione dell'urgenza
+	int turn; // numero progressivo con cui il client sar�� servito
+	int price; // prezzo che il client dovr�� pagare: (a) un tanto fisso per
+		// ogni prestazione, pi�� (b) una quota in funzione dell'urgenza
 		// sia (a) sia (b) sono fissati tramite il file di configurazione
-	int receipt_fname[FILENAMELEN]; // nome del file in cui è memorizzata la
-	 	// fattura per una data prenotazione: in linea di massima sarà
+	int receipt_fname[FILENAMELEN]; // nome del file in cui �� memorizzata la
+	 	// fattura per una data prenotazione: in linea di massima sar��
 	 	// PID_number.txt
 } request, response, reservation;
 
