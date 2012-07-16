@@ -61,8 +61,15 @@
 #define RAD_queue_KEY 1494941
 //
 #define INVOICE_PATH "invoices/"
-//
-typedef struct {
+
+#define TRUE 1
+#define FALSE 0
+//variabili per definire i codici della coda
+#define TOSRV 10
+#define TOCLI 11
+
+//definizione della struttura
+typedef struct _msgbuf{
 	long mtype; //
 	int  clientId; // utilizzato dal client, per indicare al server
 		// a chi spedire la risposta
@@ -76,11 +83,10 @@ typedef struct {
 	 	// fattura per una data prenotazione: in linea di massima sarà
 	 	// PID_number.txt
 } request, response, reservation;
+
 // suggerimento
 // request: client->server
 // response: server->client
 // reservation: server->coda_singolo_reparto
-
-
 
 
