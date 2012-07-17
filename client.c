@@ -10,7 +10,7 @@
 
 void recive_socket(){
 	int sd = -1, sd2 = -1, n;
-	char buf[100];
+	char buf[200];
 	char sock[20];
 
 	struct sockaddr_un srvaddr;
@@ -30,9 +30,6 @@ void recive_socket(){
 	srvaddr.sun_family = AF_UNIX;
 	strcpy(srvaddr.sun_path, sock);
 
-//	len = offsetof(struct sockaddr_un, sun_path) + strlen("srv.sock");
-
-	//n = bind(sd, (struct sockaddr *)&srvaddr, SUN_LEN(&srvaddr));
 	n = bind(sd, (struct sockaddr *)&srvaddr, sizeof(srvaddr));
 	if (n < 0) {
 		perror("Unable to bind socket server");
@@ -51,13 +48,13 @@ void recive_socket(){
 		exit(1);
 	}
 
-	n = read(sd2, buf, sizeof(char)*100);
+	n = read(sd2, buf, sizeof(char)*200);
 	if(n < 0){
 		perror("Unable st read on socket");
 		exit(1);
 	}
 
-	printf("ho ricevuto %s\n", buf);
+	printf("\n%s\n", buf);
 	//strcpy(buf, "dati server");
 	//n = read(sd2, buf, sizeof("dati server"));
 
@@ -90,7 +87,7 @@ int main(int argc, char **argv){
 	printf("in attesa della risposta");
 
 	msgrcv(MSG_Q__main_bus, risposta, sizeof(response), TOCLI, 0);
-	printf("il mio pid %d\n", getpid());
+	//printf("il mio pid %d\n", getpid());
 
 	recive_socket();
 
