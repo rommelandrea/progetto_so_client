@@ -10,12 +10,13 @@
 
 void recive_socket(){
 	int sd = -1, sd2 = -1, n;
+	char buf[100];
+	char sock[20];
 
 	struct sockaddr_un srvaddr;
 
-	char sock[20];
 	int pid = getpid();
-	sprintf(sock, "%d.sock", pid);
+	sprintf(sock, "/tmp/%d.sock", pid);
 
 	printf("\nSOCKCLI %s\n", sock);
 
@@ -50,9 +51,12 @@ void recive_socket(){
 		exit(1);
 	}
 
-	char buf[100];
+	n = read(sd2, buf, sizeof(char)*100);
+	if(n < 0){
+		perror("Unable st read on socket");
+		exit(1);
+	}
 
-	n = read(sd2, buf, 100);
 	printf("ho ricevuto %s\n", buf);
 	//strcpy(buf, "dati server");
 	//n = read(sd2, buf, sizeof("dati server"));
@@ -65,6 +69,7 @@ void recive_socket(){
 int main(int argc, char **argv){
 	int MSG_Q__main_bus;
 	request *richiesta = malloc(sizeof(request));
+	response *risposta = malloc(sizeof(response));
 
 	MSG_Q__main_bus = msgget(SERVER_KEY, 0);
 	if(MSG_Q__main_bus < 0 ){
@@ -82,6 +87,9 @@ int main(int argc, char **argv){
 	msgsnd(MSG_Q__main_bus, richiesta, sizeof(request), TOSRV);
 	printf("richiesta inviata\n");
 
+	printf("in attesa della risposta");
+
+	msgrcv(MSG_Q__main_bus, risposta, sizeof(response), TOCLI, 0);
 	printf("il mio pid %d\n", getpid());
 
 	recive_socket();
