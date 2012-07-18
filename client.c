@@ -11,7 +11,7 @@
  * crea un socket
  */
 void create_socket(int *sd) {
-	printf("SD %d\n", *sd);
+	//printf("SD %d\n", *sd);
 	int ret;
 	struct sockaddr_un srvaddr;
 	char sock[20];
@@ -76,9 +76,20 @@ void recive_socket(int *sd) {
 }
 
 int main(int argc, char **argv) {
+	
+	int numSons = 0;	 
+	int numReparto = 0;	
+	int prior = 2; //Reparto di default è radiologia(2)
+
+	if (argc > 1) { //Controllo se ci sono parametri passati in input
+		numSons = atoi(argv[1]);
+		numReparto = atoi(argv[2]);
+		prior = atoi(argv[3]);	
+	//	printf("\t\t\t\t SONS: %d, REP; %d, PRIOR: %d", numSons,numReparto,prior);
+	}
+	
 	int MSG_Q__main_bus;
-	request *richiesta = malloc(sizeof(request));
-	response *risposta = malloc(sizeof(response));
+	
 
 	int sock_id;
 	sock_id = 0;
@@ -89,32 +100,56 @@ int main(int argc, char **argv) {
 		exit(1);
 	}
 
-	/**
-	 * apro il socket
-	 */
-	create_socket(&sock_id);
+	int son;
+	int count = 0;
+	printf("\n\tCreazione %d figli\n", numSons);
+	
+	for (count=0; count<numSons; count++) {
+		printf("\tCount:%d\n\n", count);
+		
+		son = fork();
+		if (son < 0) {
+			perror("Unable to create son\n");
+			fflush(stdout);
+			exit(1);	
+		}
+		if (son == 0) {
+			request *richiesta = malloc(sizeof(request));
+			response *risposta = malloc(sizeof(response));
+				
+			/**
+		 	* apro il socket
+		 	*/
+		 	printf("\t\t\n\t==> Sono figlio! %d\n\n", getpid());
+		 	
+			create_socket(&sock_id);
 
+			richiesta->mtype = TOSRV;
+			richiesta->clientId = getpid();
+			richiesta->priority = IMONHOLODAY;
+			richiesta->kindof_service = OPHTHALMOLOGY;
+			richiesta->turn = 0;
+			richiesta->price = 0;
 
-	richiesta->mtype = TOSRV;
-	richiesta->clientId = getpid();
-	richiesta->priority = IMONHOLODAY;
-	richiesta->kindof_service = OPHTHALMOLOGY;
-	richiesta->turn = 0;
-	richiesta->price = 0;
+			msgsnd(MSG_Q__main_bus, richiesta, sizeof(request), TOSRV);
+			printf("\t\trichiesta inviata\n");
 
-	msgsnd(MSG_Q__main_bus, richiesta, sizeof(request), TOSRV);
-	printf("richiesta inviata\n");
+			recive_socket(&sock_id);
 
-	recive_socket(&sock_id);
+			printf("\t\tin attesa della risposta\n");
 
-	printf("in attesa della risposta");
+			msgrcv(MSG_Q__main_bus, risposta, sizeof(response), TOCLI, 0);
 
-	msgrcv(MSG_Q__main_bus, risposta, sizeof(response), TOCLI, 0);
+			printf("\t\tricevuta, ho il turno: %d\n\n", risposta->turn);
 
-	printf("ricevuta, ho il turno: %d\n", risposta->turn);
+			free(richiesta);
+			close_socket(&sock_id, getpid());	
+		}
+		else {
+			wait(0);	
+		}		
+	}
 
-	free(richiesta);
-	close_socket(&sock_id, getpid());
 
 	return 0;
 }
