@@ -45,7 +45,7 @@
 #define ORTHOPEDICS 1
 #define RADIOLOGY 2
 //
-// =========== costanti di utilit�� generale ============
+// =========== costanti di utilita' generale ============
 //
 // ----- max lunghezza del file contenente la fattura -----
 #define FILENAMELEN 32
@@ -80,9 +80,9 @@ typedef struct _msgbuf{
 		// a chi spedire la risposta
 	short priority; // in {0,1,2,3,4} 0: ILLWAIT, ..., 4: CANTWAIT
 	int kindof_service; // in {0,1,2} cfr. #define sopra
-	int turn; // numero progressivo con cui il client sar�� servito
-	int price; // prezzo che il client dovr�� pagare: (a) un tanto fisso per
-		// ogni prestazione, pi�� (b) una quota in funzione dell'urgenza
+	int turn; // numero progressivo con cui il client sara' servito
+	int price; // prezzo che il client dovra' pagare: (a) un tanto fisso per
+		// ogni prestazione, piu' (b) una quota in funzione dell'urgenza
 		// sia (a) sia (b) sono fissati tramite il file di configurazione
 } request, response, reservation;
 

@@ -78,8 +78,8 @@ void recive_socket(int *sd) {
 int main(int argc, char **argv) {
 	
 	int numSons = 1;	 
-	int numReparto = 0;	
-	int prior = 2; //Reparto di default è radiologia(2)
+	int numReparto = 2; //Reparto di default radiologia(2)
+	int prior = 0;
 	
 	if (argc > 2) { //Controllo se ci sono parametri passati in input
 		numSons = atoi(argv[1]);
@@ -143,11 +143,13 @@ int main(int argc, char **argv) {
 			printf("\t\tRicevuta, ho il turno: %d\n\n", risposta->turn);
 			
 			free(richiesta);
+			free(risposta);
 			close_socket(&sock_id, getpid());
+			exit(0);
 		}
 		else {
 			wait(0);
-			exit(1);	
+			exit(0);
 		}		
 	}
 	
