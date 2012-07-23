@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#include <linux/stddef.h>
+#include <stddef.h>
 #include <string.h>
 #include <errno.h>
 
@@ -12,12 +12,14 @@
 #include <sys/sem.h>
 #include <sys/shm.h>
 #include <sys/wait.h>
-#include <sys/socket.h>
-#include <sys/un.h>
+#include <sys/un.h> //aggiunta dopo
+#include <sys/socket.h> //aggiunta dopo
 
+#include <fnmatch.h>
 #include <limits.h>
 #include <fcntl.h>
 #include <signal.h>
+
 //
 //
 // -------- LABORATORIO DI SISTEMI OPERATIVI - A.A. 2011-2012 ---------
@@ -69,6 +71,7 @@
 //variabili per definire i codici della coda
 #define TOSRV 10
 #define TOCLI 11
+#define TORES 12
 
 //definizione della struttura
 typedef struct _msgbuf{
@@ -81,9 +84,6 @@ typedef struct _msgbuf{
 	int price; // prezzo che il client dovr�� pagare: (a) un tanto fisso per
 		// ogni prestazione, pi�� (b) una quota in funzione dell'urgenza
 		// sia (a) sia (b) sono fissati tramite il file di configurazione
-	int receipt_fname[FILENAMELEN]; // nome del file in cui �� memorizzata la
-	 	// fattura per una data prenotazione: in linea di massima sar��
-	 	// PID_number.txt
 } request, response, reservation;
 
 // suggerimento
