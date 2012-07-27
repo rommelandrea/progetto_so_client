@@ -77,16 +77,15 @@ void recive_socket(int *sd) {
 
 int main(int argc, char **argv) {
 	
-	int numSons = 1;	 
-	int numReparto = 2; //Reparto di default radiologia(2)
+	int num_sons = 1;	 
+	int num_reparto = 2; //Reparto di default radiologia(2)
 	int prior = 0;
 	
-	if (argc > 2) { //Controllo se ci sono parametri passati in input
-		numSons = atoi(argv[1]);
-		numReparto = atoi(argv[2]);
+	if (argc >= 2) { //Controllo se ci sono parametri passati in input
+		num_sons = atoi(argv[1]);
+		num_reparto = atoi(argv[2]);
 		prior = atoi(argv[3]);	
-		
-		//printf("\t\t\t\t SONS: %d, REP; %d, PRIOR: %d", numSons,numReparto,prior);
+	//	printf("\t\tSONS: %d, REP; %d, PRIOR: %d", numSons,numReparto,prior);
 	}
 	
 	int MSG_Q__main_bus;
@@ -100,11 +99,11 @@ int main(int argc, char **argv) {
 		exit(1);
 	}
 	
-	int son, cCount = 0;
+	int son, i = 0;
 
-	printf("\nCreazione di %d figli:\n", numSons);
+	printf("\nCreazione di %d figli:\n", num_sons);
 	
-	for(cCount=0; cCount<numSons; cCount++) {
+	for(i=0; i<num_sons; i++) {
 		
 		son = fork();
 		if (son < 0) {
@@ -120,14 +119,14 @@ int main(int argc, char **argv) {
 			/**
 			 * apro il socket
 			 */
-		 	printf("\t\t\n==> Sono il %d. figlio PID: %d\n", cCount+1,getpid());
+		 	printf("\t\t\n==> Sono il %d. figlio PID: %d\n", i+1,getpid());
 		 	
 			create_socket(&sock_id);
 			
 			richiesta->mtype = TOSRV;
 			richiesta->clientId = getpid();
 			richiesta->priority = prior;
-			richiesta->kindof_service = numReparto;
+			richiesta->kindof_service = num_reparto;
 			richiesta->turn = 0;
 			richiesta->price = 0;
 			
@@ -141,11 +140,12 @@ int main(int argc, char **argv) {
 			msgrcv(MSG_Q__main_bus, risposta, sizeof(response), TOCLI, 0);
 			
 			printf("\t\tRicevuta, ho il turno: %d\n\n", risposta->turn);
+			printf("...............................................................................\n\n");
 			
 			free(richiesta);
 			free(risposta);
 			close_socket(&sock_id, getpid());
-			exit(0);
+			//exit(0);
 		}
 		else {
 			wait(0);
