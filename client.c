@@ -145,7 +145,7 @@ int main(int argc, char **argv) {
 			free(richiesta);
 			free(risposta);
 			close_socket(&sock_id, getpid());
-			//exit(0);
+			//exit(0); Da togliere
 		}
 		else {
 			wait(0);
