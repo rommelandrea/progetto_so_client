@@ -90,11 +90,11 @@ int main(int argc, char **argv) {
 			printf("The argument are int int int \n");
 			exit(EXIT_FAILURE);
 		}
-		if (sscanf(argv[1], "%d", &num_reparto) <= 0) {
+		if (sscanf(argv[2], "%d", &num_reparto) <= 0) {
 			printf("The argument are int int int \n");
 			exit(EXIT_FAILURE);
 		}
-		if (sscanf(argv[1], "%d", &prior) <= 0) {
+		if (sscanf(argv[3], "%d", &prior) <= 0) {
 			printf("The argument are int int int \n");
 			exit(EXIT_FAILURE);
 		}
