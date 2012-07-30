@@ -8,7 +8,9 @@
 /**
  * crea un socket
  */
+#ifndef FUNZIONI_CLIENT_H_
 #include "funzioni_client.h"
+#endif
 
 void create_socket(int *sd) {
 	int ret;
@@ -42,6 +44,12 @@ void create_socket(int *sd) {
 	}
 }
 
+/**
+ * funzione per la chiusura del socket
+ * @param s puntatore al socket
+ * @param p pid del processo che ha aperto il socket, serve
+ * per la creazione del nome
+ */
 void close_socket(int *s, int p) {
 	char sock[20];
 	sprintf(sock, "/tmp/%d.sock", p);
