@@ -7,10 +7,6 @@
 
 #include "funzioni_client.h"
 
-
-
-
-
 int main(int argc, char **argv) {
 	int num_sons;
 	int num_reparto;
