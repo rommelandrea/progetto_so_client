@@ -1,3 +1,6 @@
+#ifndef HEADER_PROJ_H_
+#define HEADER_PROJ_H_
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -98,3 +101,4 @@ typedef struct _msgbuf{
 // response: server->client
 // reservation: server->coda_singolo_reparto
  * */
+#endif

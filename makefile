@@ -4,8 +4,8 @@ LIBS = -lpthread
 PROG = client
 
 attuatore: client.c 
-	$(CC) $(CFLAGS) -c client.c
-	$(CC) client.o  -o $(PROG)
+	$(CC) $(CFLAGS) -c funzioni_client.c client.c
+	$(CC) client.o  funzioni_client.o -o $(PROG)
 
 clean:
 	rm -f *.o *~

@@ -5,76 +5,11 @@
  *      Author: Andrea Romanello, Amir Curic
  */
 
-#include "header_proj.h"
+#include "funzioni_client.h"
 
-/**
- * crea un socket
- */
-void create_socket(int *sd) {
-	int ret;
-	struct sockaddr_un srvaddr;
-	char sock[20];
 
-	int pid = getpid();
-	sprintf(sock, "/tmp/%d.sock", pid);
 
-	*sd = (int) socket(AF_UNIX, SOCK_STREAM, 0);
-	if (*sd < 0) {
-		perror("Unable to open server socket");
-		exit(1);
-	}
-	memset(&srvaddr, 0, sizeof(srvaddr));
 
-	srvaddr.sun_family = AF_UNIX;
-	strcpy(srvaddr.sun_path, sock);
-
-	ret = bind(*sd, (struct sockaddr *) &srvaddr, sizeof(srvaddr));
-	if (ret < 0) {
-		perror("Unable to bind socket server");
-		close(*sd);
-		exit(1);
-	}
-
-	ret = listen(*sd, 1);
-	if (ret < 0) {
-		perror("Unable to listen socket server");
-		exit(1);
-	}
-}
-
-void close_socket(int *s, int p) {
-	char sock[20];
-	sprintf(sock, "/tmp/%d.sock", p);
-
-	close(*s);
-	unlink(sock);
-}
-
-/**
- * questa funzione serve per leggere il socket in ingresso
- */
-void recive_socket(int *sd) {
-	int sd2;
-	char buf[200];
-
-	sd2 = -1;
-
-	sd2 = accept(*sd, NULL, NULL );
-	if (sd2 < 0) {
-		perror("Unable to accept socket server");
-		exit(1);
-	}
-
-	if (read(sd2, buf, sizeof(char) * 200) < 0) {
-		perror("Unable st read on socket");
-		exit(1);
-	}
-
-	printf("\n%s\n", buf);
-
-	close(*sd);
-	close(sd2);
-}
 
 int main(int argc, char **argv) {
 	int num_sons;
@@ -95,15 +30,27 @@ int main(int argc, char **argv) {
 
 	if (argc == 4) {
 		if (sscanf(argv[1], "%d", &num_sons) <= 0) {
-			printf("The argument are int int int \n");
+			perror("The argument are int int int \n");
 			exit(EXIT_FAILURE);
 		}
 		if (sscanf(argv[2], "%d", &num_reparto) <= 0) {
-			printf("The argument are int int int \n");
+			perror("The argument are int int int \n");
 			exit(EXIT_FAILURE);
 		}
 		if (sscanf(argv[3], "%d", &prior) <= 0) {
-			printf("The argument are int int int \n");
+			perror("The argument are int int int \n");
+			exit(EXIT_FAILURE);
+		}
+		if(num_sons<1){
+			perror("Wrong number of sons, insert int from 0 to inf");
+			exit(EXIT_FAILURE);
+		}
+		if(num_reparto<0 || num_reparto >2){
+			perror("The division is wrong insert number from 0 to 2");
+			exit(EXIT_FAILURE);
+		}
+		if(prior<0 || prior >4){
+			perror("The priority is wrong insert number from 0 to 4");
 			exit(EXIT_FAILURE);
 		}
 	}
