@@ -11,7 +11,6 @@
  * crea un socket
  */
 void create_socket(int *sd) {
-	//printf("SD %d\n", *sd);
 	int ret;
 	struct sockaddr_un srvaddr;
 	char sock[20];
@@ -55,8 +54,10 @@ void close_socket(int *s, int p) {
  * questa funzione serve per leggere il socket in ingresso
  */
 void recive_socket(int *sd) {
-	int sd2 = -1; //, ret;
+	int sd2;
 	char buf[200];
+
+	sd2 = -1;
 
 	sd2 = accept(*sd, NULL, NULL );
 	if (sd2 < 0) {
@@ -76,14 +77,21 @@ void recive_socket(int *sd) {
 }
 
 int main(int argc, char **argv) {
+	int num_sons;
+	int num_reparto;
+	int prior;
+	int MSG_Q__main_bus;
+	int sock_id;
+	int i, son;
+
 	if (argc != 1 && argc != 4) {
 		perror("The program run with 0 argument or with 3 integer");
 		exit(1);
 	}
 
-	int num_sons = 1;
-	int num_reparto = 2; //Reparto di default radiologia(2)
-	int prior = 0;
+	num_sons = 1;
+	num_reparto = 2; /*Reparto di default radiologia(2)*/
+	prior = 0; /* priorita' default 0 */
 
 	if (argc == 4) {
 		if (sscanf(argv[1], "%d", &num_sons) <= 0) {
@@ -109,9 +117,6 @@ int main(int argc, char **argv) {
 	 }
 	 */
 
-	int MSG_Q__main_bus;
-
-	int sock_id;
 	sock_id = 0;
 
 	MSG_Q__main_bus = msgget(SERVER_KEY, 0);
@@ -120,7 +125,7 @@ int main(int argc, char **argv) {
 		exit(1);
 	}
 
-	int son, i = 0;
+	son = -1; i = 0;
 
 	printf("\nCreazione di %d figli:\n", num_sons);
 
@@ -167,7 +172,7 @@ int main(int argc, char **argv) {
 			free(richiesta);
 			free(risposta);
 			close_socket(&sock_id, getpid());
-			//exit(0); Da togliere
+			/*exit(0); Da togliere*/
 		} else {
 			wait(0);
 			exit(0);
