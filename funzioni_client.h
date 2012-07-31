@@ -2,7 +2,7 @@
  * funzioni_client.h
  *
  *  Created on: Jul 30, 2012
- *      Author: rommel
+ *      Author: Andrea Romanello, Amir Curic
  */
 
 #ifndef HEADER_PROJ_H_

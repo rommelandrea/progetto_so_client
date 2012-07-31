@@ -2,7 +2,7 @@
  * funzioni_client.c
  *
  *  Created on: Jul 30, 2012
- *      Author: rommel
+ *      Author: Andrea Romanello, Amir Curic
  */
 
 /**
